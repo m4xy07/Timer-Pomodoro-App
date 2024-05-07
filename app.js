@@ -1,38 +1,70 @@
 // app.js
-const startBtn = document.querySelector('.btn-start');
-const session = document.querySelector('.minutes');
-let myInterval;
-let state = true;
 
-const appTimer = () => {
-  const sessionAmount = Number.parseInt(session.textContent);
+const timerElement = document.querySelector('.countdown-text');
+const startButton = document.getElementById('startButton');
+const resetButton = document.getElementById('resetButton');
+const circleElement = document.querySelector('circle');
+const audioElement = document.getElementById('timerAudio');
+var playing = false;
+var startTime = 25*60;
+var timeleft = startTime;
+let intervalId;
 
-  if (state) {
-    state = false;
-    let totalSeconds = sessionAmount * 60;
+function formatTime(time){
+  return time < 10 ? `0${time}` : time;
+}
 
-    const updateSeconds = () => {
-      totalSeconds--;
+timerElement.innerText = `${formatTime(Math.floor(startTime / 60))}:${formatTime(startTime % 60)}`;
 
-      let minutesLeft = Math.floor(totalSeconds / 60);
-      let secondsLeft = totalSeconds % 60;
-
-      if (secondsLeft < 10) {
-        document.querySelector('.seconds').textContent = '0' + secondsLeft;
-      } else {
-        document.querySelector('.seconds').textContent = secondsLeft;
-      }
-      document.querySelector('.minutes').textContent = minutesLeft;
-
-      if (minutesLeft === 0 && secondsLeft === 0) {
-        alert('Focus session complete!');
-        clearInterval(myInterval);
-      }
-    }
-    myInterval = setInterval(updateSeconds, 1000);
-  } else {
-    alert('Focus session has already started.');
+function countdown(){
+  timeleft -= 1;
+  let minutes = Math.floor(timeleft / 60);
+  let seconds = timeleft % 60;
+  timerElement.innerText = `${formatTime(minutes)}:${formatTime(seconds)}`;
+  circleElement.style.strokeDashoffset = ((startTime - timeleft) / startTime) * 283;
+  if(timeleft < 0){
+    clearInterval(intervalId);
+     timerElement.innerText = "Nice job!";
+    resetTimer();
   }
 }
 
-startBtn.addEventListener('click', appTimer);
+function startTimer(){
+  if(intervalId == null){
+    intervalId = setInterval(countdown, 1000);
+    audioElement.play();
+  }
+}
+
+function pauseTimer(){
+    clearInterval(intervalId);
+    intervalId = null;
+    audioElement.pause();
+}
+
+function resetTimer(){
+  pauseTimer();
+  playing = false;
+  startButton.innerText = "Start";
+  timeleft = startTime;
+  timerElement.innerText = `${formatTime(Math.floor(startTime / 60))}:${formatTime(startTime % 60)}`;
+  circleElement.style.strokeDashoffset = 0;
+  audioElement.pause();
+}
+
+function onClickFunction(){
+  if(!playing){
+    startButton.innerText = "Pause";
+    playing = true;
+    startTimer();
+  }else{
+    startButton.innerText = "Start";
+    playing = false;
+    pauseTimer();
+  }
+}
+
+startButton.addEventListener('click', onClickFunction);
+resetButton.addEventListener("click", function(){
+  resetTimer();
+});

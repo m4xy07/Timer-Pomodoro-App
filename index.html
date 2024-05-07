@@ -1,27 +1,22 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus Timer</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="app-container">
-      <h1>Focus Timer</h1>
-      <div class="app-message">Press start to begin</div>
-      <div class="app-circle">
-        <div class="circle-shape">
-          <div class="semi-circle left-side circle-mask"></div>
-          <div class="semi-circle right-side circle"></div>
-        </div>
-        <div class="app-counter-box">
-          <p><span class="minutes">25</span>:<span class="seconds">00</span></p>
-        </div>
-        <button class="btn-start">Start</button>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Focus Timer - Pomodoro</title>
+</head>
+<body>
+  <div class="timer-container">
+    <div class="topBar">
+      <h1 class="top-bar-heading">Focus Timer</h1>
+      <svg class="countdown-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45"></circle></svg>
+      <div class="countdown-text"></div>
+      <button class="btn" id="startButton">Start</button>
+      <button class="btn" id="resetButton">Reset</button>
+      <audio id="timerAudio" src="assets/timer-audio.mp3" loop></audio>
     </div>
-    <script src="app.js"></script>
-  </body>
+  </div>
+  <script src="app.js"></script>
+</body>
 </html>
